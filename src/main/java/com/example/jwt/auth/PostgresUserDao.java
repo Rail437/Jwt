@@ -1,22 +1,16 @@
 package com.example.jwt.auth;
 
-import com.example.jwt.model.PermissionEntity;
-import com.example.jwt.model.RoleEntity;
 import com.example.jwt.model.UserEntity;
 import com.example.jwt.repository.PermissionRepo;
 import com.example.jwt.repository.RoleRepository;
 import com.example.jwt.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.Set;
 
-import static com.example.jwt.model.ApplicationUserRole.*;
-
-@Service
+@Service("Postgres")
 @RequiredArgsConstructor
 public class PostgresUserDao implements ApplicationUserDao {
 
@@ -30,8 +24,15 @@ public class PostgresUserDao implements ApplicationUserDao {
         return userRepository.findByUsername(username).map(ApplicationUser::valueOf);
     }
 
-    @Autowired
-    private void init(){
+    public void saveToken(String name,String token){
+        Optional<UserEntity> user = userRepository.findByUsername(name);
+        if(user.isPresent()){
+            user.get().setToken(token);
+            userRepository.save(user.get());
+        }
+    }
+
+    /*private void init(){
 
         PermissionEntity EMPLOYEE_READ = new PermissionEntity("EMPLOYEE_READ");
         PermissionEntity EMPLOYEE_WRITE = new PermissionEntity("EMPLOYEE_WRITE");
@@ -81,5 +82,5 @@ public class PostgresUserDao implements ApplicationUserDao {
         userRepository.save(oliver);
         userRepository.save(henry);
         userRepository.save(emma);
-    }
+    }*/
 }

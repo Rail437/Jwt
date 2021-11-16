@@ -2,6 +2,7 @@ package com.example.jwt.auth;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,11 +12,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class ApplicationUserService implements UserDetailsService {
 
-    private final PostgresUserDao applicationUserDao;
+    private final ApplicationUserDao applicationUserDao;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return applicationUserDao.selectUserFromDbByUserName(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
+
+    public void saveBearerToken(String username,String token){
+        applicationUserDao.saveToken(username,token);
     }
 }

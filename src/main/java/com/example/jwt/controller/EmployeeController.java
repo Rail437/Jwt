@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class EmployeeController {
             new Employee(3, "Mr. Bean")
     );
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public Employee getEmployee(@PathVariable("id") Integer employeeId) {
         return EMPLOYEES.stream()
                 .filter(employee -> employeeId.equals(employee.getId()))

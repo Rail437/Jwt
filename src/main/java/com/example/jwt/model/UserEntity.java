@@ -1,12 +1,14 @@
 package com.example.jwt.model;
 
 import com.example.jwt.auth.ApplicationUser;
-import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.data.repository.cdi.Eager;
 
 import javax.persistence.*;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -24,7 +26,9 @@ public class UserEntity {
     private boolean isCredentialsNonExpired;
     private boolean isEnabled;
 
-    @ManyToMany
+    private String token;
+
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -58,6 +62,9 @@ public class UserEntity {
         this.isAccountNonLocked = isAccountNonLocked;
         this.isCredentialsNonExpired = isCredentialsNonExpired;
         this.isEnabled = isEnabled;
+    }
+
+    public UserEntity() {
     }
 
     public static UserEntity valueOf(ApplicationUser user){
