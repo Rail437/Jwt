@@ -20,7 +20,4 @@ public class ApplicationUserService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
-    public void saveBearerToken(String username,String token){
-        applicationUserDao.saveToken(username,token);
-    }
 }

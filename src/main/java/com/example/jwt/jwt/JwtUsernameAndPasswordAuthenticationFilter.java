@@ -1,10 +1,8 @@
 package com.example.jwt.jwt;
 
-import com.example.jwt.auth.ApplicationUserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,7 +20,6 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    private final ApplicationUserService applicationUserService;
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
 
@@ -41,10 +38,9 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        String token = jwtProvider.createToken(authResult);
-        String tokenOnMonth = jwtProvider.createTokenOnMonth(authResult);
-        applicationUserService.saveBearerToken(authResult.getName(),tokenOnMonth);
-        response.addHeader(HttpHeaders.AUTHORIZATION, token);
-        response.addHeader(HttpHeaders.AUTHORIZATION, tokenOnMonth);
+        String access_token = jwtProvider.createToken(authResult);
+        String refresh_token = jwtProvider.createTokenOnMonth(authResult);
+        response.addHeader(HttpHeaders.AUTHORIZATION, access_token);
+        response.addHeader("REFRESH_JWT_TOKEN", refresh_token);
     }
 }

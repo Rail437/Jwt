@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 public class JwtProvider {
 
     private final static String BEARER_PREFIX = "Bearer ";
-    private final static String BEARER_MONTH_PREFIX = "BearerOnMonth ";
     private final static String KEY = "securesecuresecuresecuresecuresecuresecures";
 
     public String createToken(Authentication authentication) {
@@ -32,13 +31,13 @@ public class JwtProvider {
                 .setSubject(authentication.getName())
                 .claim("authorities", authentication.getAuthorities())
                 .setIssuedAt(new Date())
-                .setExpiration(java.sql.Date.valueOf(LocalDateTime.now().toLocalDate().plusWeeks(1)))
+                .setExpiration(java.sql.Date.valueOf(LocalDateTime.now().toLocalDate().plusDays(1)))
                 .signWith(Keys.hmacShaKeyFor(KEY.getBytes()))
                 .compact();
     }
 
     public String createTokenOnMonth(Authentication authentication) {
-        return BEARER_MONTH_PREFIX +  Jwts.builder()
+        return BEARER_PREFIX +  Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim("authorities", authentication.getAuthorities())
                 .setIssuedAt(new Date())

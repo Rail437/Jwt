@@ -11,7 +11,8 @@ import static com.example.jwt.model.ApplicationUserPermission.*;
 public enum ApplicationUserRole {
     EMPLOYEE(Sets.newHashSet(EMPLOYEE_READ, TASK_READ, TASK_WRITE)),
     MANAGER(Sets.newHashSet(EMPLOYEE_READ, EMPLOYEE_WRITE, TASK_READ, TASK_WRITE)),
-    TRAINEE(Sets.newHashSet(TASK_READ, EMPLOYEE_READ));
+    TRAINEE(Sets.newHashSet(TASK_READ, EMPLOYEE_READ)),
+    SCRUM_MUSTER(Sets.newHashSet(TASK_READ,TASK_WRITE, EMPLOYEE_READ));
 
     private final Set<ApplicationUserPermission> permissions;
 

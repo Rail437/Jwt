@@ -5,6 +5,7 @@ import com.example.jwt.model.Task;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class ManagerController {
             new Task(2L , "Update properties", "Update properties of db in dev stand")
     );
 
+    @PreAuthorize("hasAnyRole('MANAGER','SCRUM_MUSTER')")
     @GetMapping("/employee/{id}")
     public Employee getEmployee(@PathVariable("id") Integer employeeId) {
         return EMPLOYEES.stream()
@@ -33,7 +35,7 @@ public class ManagerController {
                 ));
     }
 
-    @PreAuthorize("hasRole('MANAGER')")
+    @PreAuthorize("hasAnyRole('MANAGER','SCRUM_MUSTER')")
     @GetMapping("/task/{id}")
     public Task getTask(@PathVariable("id") Integer taskId) {
         return TASKS.stream()
@@ -44,11 +46,13 @@ public class ManagerController {
                 ));
     }
 
+    @PreAuthorize("hasAuthority('EMPLOYEE_WRITE')")
     @DeleteMapping("/employee/{id}")
-    public void fireEmployee(@PathVariable("id") Integer employeeId) {
+    public void fireEmployee(@PathVariable("id") Integer employeeId, Principal principal) {
         System.out.println("Emplyee " + employeeId + "is fired");
     }
 
+    @PreAuthorize("hasAnyRole('MANAGER','SCRUM_MUSTER')")
     @PostMapping("/task/{id}")
     public void createTask(@PathVariable("id") String taskId, @RequestBody Task task) {
         System.out.println("Created new task" + task);

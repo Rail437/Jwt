@@ -1,5 +1,6 @@
 package com.example.jwt.jwt;
 
+import com.example.jwt.exception.TokenInvalidException;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,7 +34,7 @@ public class JwtTokenVerifierFilter extends OncePerRequestFilter {
 
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(username, null, authorities));
         } catch (JwtException e) {
-            throw new IllegalArgumentException("Token is not valid");
+            throw new TokenInvalidException("Token is not valid");
         }
         filterChain.doFilter(request, response);
     }
